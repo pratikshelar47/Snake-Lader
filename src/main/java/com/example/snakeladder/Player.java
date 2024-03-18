@@ -54,13 +54,15 @@ public class Player{
         animate.setAutoReverse(false);
         return animate;
     }
+    public void startingPosition(){
+        currentPosition = 0;
+        movePlayer(1);
+
+    }
     boolean isWinner(){
-        if(currentPosition == 100){
+        if(currentPosition == 100)
             return true;
-        }
-        else{
-            return false;
-        }
+        return false;
     }
 
     public Circle getCoin() {

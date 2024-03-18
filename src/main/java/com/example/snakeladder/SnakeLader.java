@@ -48,14 +48,16 @@ public class SnakeLader extends Application {
 
         playerOneButton.setTranslateY(buttonLine);
         playerOneButton.setTranslateX(20);
+        playerOneButton.setDisable(true);
         playerTwoButton.setTranslateY(buttonLine);
         playerTwoButton.setTranslateX(300);
+        playerTwoButton.setDisable(true);
         startButton.setTranslateY(buttonLine);
         startButton.setTranslateX(160);
 
         //Info Display
-        Label playerOneLabel = new Label("Your turn! P1");
-        Label playerTwoLabel = new Label("Your turn! P2");
+        Label playerOneLabel = new Label("");
+        Label playerTwoLabel = new Label("");
         Label diceLabel = new Label("Start the Game");
 
         playerOneLabel.setTranslateY(infoLine);
@@ -83,18 +85,18 @@ public class SnakeLader extends Application {
                             playerOneTurn = false;
                             playerOneButton.setDisable(true);
                             playerOneLabel.setText("");
-
                             playerTwoTurn = true;
-                            playerTwoButton.setDisable(false);
+                            playerTwoButton.setDisable(true);
                             playerTwoLabel.setText("");
 
                             startButton.setDisable(false);
                             startButton.setText("Restart");
+                            gameStarted = false;
                         }
                         else{
-                            playerOneTurn = true;
-                            playerOneButton.setDisable(false);
-                            playerOneLabel.setText("Your Turn" + playerOne.getName());
+                            playerOneTurn = false;
+                            playerOneButton.setDisable(true);
+                            playerOneLabel.setText("");
 
                             playerTwoTurn = true;
                             playerTwoButton.setDisable(false);
@@ -114,18 +116,31 @@ public class SnakeLader extends Application {
                         diceLabel.setText(("Dice Value : " + diceValue));
                         playerTwo.movePlayer(diceValue);
                         //winning condition
-                        playerOneTurn = true;
-                        playerOneButton.setDisable(false);
-                        playerOneLabel.setText("Your Turn" + playerOne.getName());
+                        if(playerTwo.isWinner()){
+                            diceLabel.setText("winner is " + playerTwo.getName());
+                            playerOneTurn = false;
+                            playerOneButton.setDisable(true);
+                            playerOneLabel.setText("");
+                            playerTwoTurn = true;
+                            playerTwoButton.setDisable(true);
+                            playerTwoLabel.setText("");
 
-                        playerTwoTurn = true;
-                        playerTwoButton.setDisable(false);
-                        playerTwoLabel.setText("");
+                            startButton.setDisable(false);
+                            startButton.setText("Restart");
+                        }
+                        else{
+                            playerOneTurn = true;
+                            playerOneButton.setDisable(false);
+                            playerOneLabel.setText("Your Turn" + playerOne.getName());
+
+                            playerTwoTurn = false;
+                            playerTwoButton.setDisable(true);
+                            playerTwoLabel.setText("");
+                        }
                     }
                 }
             }
         });
-
 
         startButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -135,9 +150,13 @@ public class SnakeLader extends Application {
                 startButton.setDisable(true);
                 playerOneTurn = true;
                 playerOneLabel.setText("Your Turn " + playerOne.getName());
+                playerOneButton.setDisable(false);
+                playerOne.startingPosition();
+
                 playerTwoTurn = false;
                 playerTwoLabel.setText("");
                 playerTwoButton.setDisable(true);
+                playerTwo.startingPosition();
             }
         });
 
@@ -146,19 +165,6 @@ public class SnakeLader extends Application {
                 playerOneLabel, playerTwoLabel,diceLabel,
                 playerOne.getCoin(), playerTwo.getCoin()
         );
-        startButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                gameStarted = true;
-                diceLabel.setText("Game Started");
-                startButton.setDisable(true);
-                playerOneTurn = true;
-                playerOneLabel.setText("Your Turn" + playerOne.getName());
-                playerTwoTurn = false;
-                playerTwoLabel.setText("");
-                playerTwoButton.setDisable(true);
-            }
-        });
 
         return root;
     }

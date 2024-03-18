@@ -41,6 +41,7 @@ public class Board {
             snakeLaderPosition.add(i);
         }
         snakeLaderPosition.set(4,25);
+        snakeLaderPosition.set(13,46);
         snakeLaderPosition.set(27,5);
         snakeLaderPosition.set(33,49);
         snakeLaderPosition.set(40,3);
